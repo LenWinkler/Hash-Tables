@@ -32,7 +32,12 @@ class HashTable:
 
         OPTIONAL STRETCH: Research and implement DJB2
         '''
-        pass
+        my_hash = 5381
+
+        for char in key:
+            my_hash = (my_hash * 33) + ord(char)
+
+        return my_hash
 
 
     def _hash_mod(self, key):
