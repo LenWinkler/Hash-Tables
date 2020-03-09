@@ -51,8 +51,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
 
+        if self.storage[index]:
+            print("Error: hash collision")
+        else:
+            self.storage[index] = LinkedPair(key, value)
 
 
     def remove(self, key):
@@ -63,7 +67,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+
+        if self.storage[index] is None:
+            print('Error: key not found in hashtable')
+        else:
+            self.storage[index] = None
 
 
     def retrieve(self, key):
@@ -74,8 +83,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
 
+        if self.storage[index] is None:
+            return None
+        else:
+            return self.storage[index].value
 
     def resize(self):
         '''
