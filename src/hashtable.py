@@ -15,6 +15,8 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
+        self.count = 0
+        self.new_storage = None
 
 
     def _hash(self, key):
@@ -68,12 +70,14 @@ class HashTable:
                 if current.next is None:
                     # if it is, set current.next to new LinkedPair
                     current.next = LinkedPair(key, value)
+                    self.count += 1
                     break
                 else:
                     # else, set current var to current.next
                     current = current.next
         else:
             self.storage[index] = LinkedPair(key, value)
+            self.count += 1
 
 
     def remove(self, key):
@@ -117,8 +121,13 @@ class HashTable:
         # double capacity
         self.capacity *= 2
         # create new storage, empty at first
+        new_storage = [None] * self.capacity
         # loop over old storage, copying items one by one
+        for i in range(self.count):
+            new_index = self._hash_djb2(self.storage[i].key)
+            new_storage[new_index] = LinkedPair(self.storage[i].key, self.storage[i].value)
         # reassign old storage to the value of new storage
+        self.storage = new_storage
         
 
 
