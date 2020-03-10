@@ -59,7 +59,19 @@ class HashTable:
         index = self._hash_mod(key)
 
         if self.storage[index]:
-            print("Error: hash collision")
+            # create current var
+            current = self.storage[index]
+
+            # start while loop
+            while True:
+                # check if current.next is None
+                if current.next is None:
+                    # if it is, set current.next to new LinkedPair
+                    current.next = LinkedPair(key, value)
+                    break
+                else:
+                    # else, set current var to current.next
+                    current = current.next
         else:
             self.storage[index] = LinkedPair(key, value)
 
