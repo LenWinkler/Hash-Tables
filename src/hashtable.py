@@ -114,7 +114,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # double capacity
+        self.capacity *= 2
+        # create new storage, empty at first
+        # loop over old storage, copying items one by one
+        # reassign old storage to the value of new storage
+        
 
 
 
