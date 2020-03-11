@@ -16,8 +16,6 @@ class HashTable:
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
         self.count = 0
-        self.new_storage = None
-
 
     def _hash(self, key):
         '''
@@ -66,8 +64,12 @@ class HashTable:
 
             # start while loop
             while True:
+                # check if current.key == key, if it does replace current with what was passed in
+                if current.key == key:
+                    current.value = value
+                    break
                 # check if current.next is None
-                if current.next is None:
+                elif current.next is None:
                     # if it is, set current.next to new LinkedPair
                     current.next = LinkedPair(key, value)
                     self.count += 1
@@ -93,7 +95,14 @@ class HashTable:
         if self.storage[index] is None:
             print('Error: key not found in hashtable')
         else:
-            self.storage[index] = None
+            current = self.storage[index]
+
+            while True:
+                if current.key == key and current.next:
+                    self.storage[index] = current.next
+                    break
+                else:
+                    current = current.next
 
 
     def retrieve(self, key):
@@ -109,7 +118,15 @@ class HashTable:
         if self.storage[index] is None:
             return None
         else:
-            return self.storage[index].value
+            # in case of multiple objects in same bucket, look for matching key and return that object's value
+            # var for while loop
+            current = self.storage[index]
+            # while loop
+            while True:
+                if current.key == key:
+                    return current.value
+                else:
+                    current = current.next
 
     def resize(self):
         '''
@@ -119,16 +136,34 @@ class HashTable:
         Fill this in.
         '''
         # double capacity
+        old_capacity = self.capacity
         self.capacity *= 2
-        # create new storage, empty at first
+        # create new storage
         new_storage = [None] * self.capacity
-        # loop over old storage, copying items one by one
-        for i in range(self.count):
-            new_index = self._hash_djb2(self.storage[i].key)
-            new_storage[new_index] = LinkedPair(self.storage[i].key, self.storage[i].value)
-        # reassign old storage to the value of new storage
+        # loop over old storage, bucket by bucket (i in range(self.capacity)
+        for i in range(old_capacity):
+        # if current bucket is none, skip to next bucket
+            if self.storage[i] is None:
+                continue
+        # if not, copy current item to new storage. this will require running hashmod on the key with the new capacity
+            else:
+                # vars for current objects
+                current_old = self.storage[i]
+                current_new = None
+                # index for new storage
+                new_index = self._hash_mod(self.storage[i].key)
+                # create new LinkedPair instance at new_storage[new_index]
+                new_storage[new_index] = LinkedPair(self.storage[i].key, self.storage[i].value)
+                current_new = new_storage[new_index]
+                # if current.next is not None, move to next node and repeat
+                while current_old.next:
+                    current_old = current_old.next
+                    current_new.next = LinkedPair(current_old.key, current_old.value)
+                # once current.next is none, skip to next bucket
+                # finally, set self.storage = new storage
         self.storage = new_storage
-        
+
+
 
 
 
