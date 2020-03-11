@@ -90,17 +90,23 @@ class HashTable:
 
         Fill this in.
         '''
+
+        # get index by running hashmod on key
         index = self._hash_mod(key)
-
+        # make sure bucket isn't empty
         if self.storage[index] is None:
-            print('Error: key not found in hashtable')
+            print('Error: key not found')
         else:
+            # create current var
             current = self.storage[index]
-
+            # loop through bucket looking for the matching key
             while True:
-                if current.key == key and current.next:
+                # if first item in bucket matches key
+                if current.key == key:
+                    #set that index to current.next
                     self.storage[index] = current.next
                     break
+                # if not, set current to current.next and repeat
                 else:
                     current = current.next
 
