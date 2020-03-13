@@ -15,7 +15,6 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
-        self.count = 0
 
     def _hash(self, key):
         '''
@@ -72,14 +71,12 @@ class HashTable:
                 elif current.next is None:
                     # if it is, set current.next to new LinkedPair
                     current.next = LinkedPair(key, value)
-                    self.count += 1
                     break
                 else:
                     # else, set current var to current.next
                     current = current.next
         else:
             self.storage[index] = LinkedPair(key, value)
-            self.count += 1
 
 
     def remove(self, key):
@@ -141,33 +138,24 @@ class HashTable:
 
         Fill this in.
         '''
+        # copy old storage
+        old_storage = self.storage
         # double capacity
-        old_capacity = self.capacity
         self.capacity *= 2
-        # create new storage
-        new_storage = [None] * self.capacity
-        # loop over old storage, bucket by bucket (i in range(self.capacity)
-        for i in range(old_capacity):
-        # if current bucket is none, skip to next bucket
-            if self.storage[i] is None:
+        # expand storage to new capacity
+        self.storage = [None] * self.capacity
+        # loop over each bucket in old storage
+        for bucket in old_storage:
+            # if current bucket is none, skip to next bucket
+            if bucket is None:
                 continue
-        # if not, copy current item to new storage. this will require running hashmod on the key with the new capacity
             else:
-                # vars for current objects
-                current_old = self.storage[i]
-                current_new = None
-                # index for new storage
-                new_index = self._hash_mod(self.storage[i].key)
-                # create new LinkedPair instance at new_storage[new_index]
-                new_storage[new_index] = LinkedPair(self.storage[i].key, self.storage[i].value)
-                current_new = new_storage[new_index]
-                # if current.next is not None, move to next node and repeat
-                while current_old.next:
-                    current_old = current_old.next
-                    current_new.next = LinkedPair(current_old.key, current_old.value)
-                # once current.next is none, skip to next bucket
-                # finally, set self.storage = new storage
-        self.storage = new_storage
+                # if not, insert current item into storage
+                self.insert(bucket.key, bucket.value)
+                # repeat until end of current bucket
+                while bucket.next:
+                    bucket = bucket.next
+                    self.insert(bucket.key, bucket.value)
 
 
 
