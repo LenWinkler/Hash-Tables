@@ -52,7 +52,8 @@ class HashTable:
         Fill this in.
         '''
         hashed_key = self._hash_mod(key)
-        self.storage[hashed_key] = value
+
+        self.storage[hashed_key] = LinkedPair(key, value)
 
 
 
@@ -65,7 +66,8 @@ class HashTable:
         Fill this in.
         '''
         hashed_key = self._hash_mod(key)
-        if self.storage[hashed_key] = None:
+
+        if self.storage[hashed_key] == None:
             print('Warning: key not found')
         else:    
             self.storage[hashed_key] = None
@@ -79,7 +81,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        hashed_key = self._hash_mod(key)
+
+        if self.storage[hashed_key]:
+            return self.storage[hashed_key].value
+        else:    
+            return self.storage[hashed_key]    
 
 
     def resize(self):
@@ -89,7 +96,13 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        old_storage = self.storage
+        self.capacity *= 2
+        self.storage = [None] * self.capacity
+
+        for bucket in old_storage:
+            if bucket is not None:
+                self.insert(bucket.key, bucket.value)
 
 
 
