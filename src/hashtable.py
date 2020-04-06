@@ -16,6 +16,7 @@ class HashTable:
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
 
+
     def _hash(self, key):
         '''
         Hash an arbitrary key and return an integer.
@@ -31,12 +32,7 @@ class HashTable:
 
         OPTIONAL STRETCH: Research and implement DJB2
         '''
-        my_hash = 5381
-
-        for char in key:
-            my_hash = (my_hash * 33) + ord(char)
-
-        return my_hash
+        pass
 
 
     def _hash_mod(self, key):
@@ -44,7 +40,7 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         within the storage capacity of the hash table.
         '''
-        return self._hash_djb2(key) % self.capacity
+        return self._hash(key) % self.capacity
 
 
     def insert(self, key, value):
@@ -55,28 +51,8 @@ class HashTable:
 
         Fill this in.
         '''
-        index = self._hash_mod(key)
+        pass
 
-        if self.storage[index]:
-            # create current var
-            current = self.storage[index]
-
-            # start while loop
-            while True:
-                # check if current.key == key, if it does replace current with what was passed in
-                if current.key == key:
-                    current.value = value
-                    break
-                # check if current.next is None
-                elif current.next is None:
-                    # if it is, set current.next to new LinkedPair
-                    current.next = LinkedPair(key, value)
-                    break
-                else:
-                    # else, set current var to current.next
-                    current = current.next
-        else:
-            self.storage[index] = LinkedPair(key, value)
 
 
     def remove(self, key):
@@ -87,25 +63,7 @@ class HashTable:
 
         Fill this in.
         '''
-
-        # get index by running hashmod on key
-        index = self._hash_mod(key)
-        # make sure bucket isn't empty
-        if self.storage[index] is None:
-            print('Error: key not found')
-        else:
-            # create current var
-            current = self.storage[index]
-            # loop through bucket looking for the matching key
-            while True:
-                # if first item in bucket matches key
-                if current.key == key:
-                    #set that index to current.next
-                    self.storage[index] = current.next
-                    break
-                # if not, set current to current.next and repeat
-                else:
-                    current = current.next
+        pass
 
 
     def retrieve(self, key):
@@ -116,20 +74,8 @@ class HashTable:
 
         Fill this in.
         '''
-        index = self._hash_mod(key)
+        pass
 
-        if self.storage[index] is None:
-            return None
-        else:
-            # in case of multiple objects in same bucket, look for matching key and return that object's value
-            # var for while loop
-            current = self.storage[index]
-            # while loop
-            while True:
-                if current.key == key:
-                    return current.value
-                else:
-                    current = current.next
 
     def resize(self):
         '''
@@ -138,26 +84,7 @@ class HashTable:
 
         Fill this in.
         '''
-        # copy old storage
-        old_storage = self.storage
-        # double capacity
-        self.capacity *= 2
-        # expand storage to new capacity
-        self.storage = [None] * self.capacity
-        # loop over each bucket in old storage
-        for bucket in old_storage:
-            # if current bucket is none, skip to next bucket
-            if bucket is None:
-                continue
-            else:
-                # if not, insert current item into storage
-                self.insert(bucket.key, bucket.value)
-                # repeat until end of current bucket
-                while bucket.next:
-                    bucket = bucket.next
-                    self.insert(bucket.key, bucket.value)
-
-
+        pass
 
 
 
