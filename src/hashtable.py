@@ -59,7 +59,7 @@ class HashTable:
         # if there's nothing in the bucket at hashed_key, put new LinkedPair there
         if pair is None:
             pair = LinkedPair(key, value)
-        # else, we'll loop through the bucket until we either find the key or we hit the end of the chain
+        # else, we'll traverse the nodes until we either find the key or we hit the end of the chain
         else:
             while pair is not None:
                 # if we get to the end of the chain without finding the key, add new LinkedPair on end of chain
@@ -87,12 +87,33 @@ class HashTable:
         # hash the key
         hashed_key = self._hash_mod(key)
         # pair var
-        
+        pair = self.storage[hashed_key]
 
-        if self.storage[hashed_key] == None:
+        # print warning if bucket is empty
+        if pair is None:
             print('Warning: key not found')
-        else:    
-            self.storage[hashed_key] = None
+        # else, traverse nodes until key is found
+        else:
+            while pair is not None:
+            # if pair.key == key and next is None, set bucket to None
+            if pair.key == key and pair.next is None:
+                pair = None
+                break
+            # if we hit the end of the chain and key is still not found, print warning
+            elif pair.key != key and pair.next is None:
+                print('Warning: key not found')
+            # when key is found, set next to next.next. this cuts the discarded node out of the chain
+            elif pair.next and pair.next.key == key:
+                pair.next = pair.next.next
+            # if current key != key arg and current pair has a next, go to next and continue loop
+            else:
+                pair = pair.next
+                continue
+
+        # if self.storage[hashed_key] == None:
+        #     print('Warning: key not found')
+        # else:    
+        #     self.storage[hashed_key] = None
 
 
     def retrieve(self, key):
@@ -103,12 +124,35 @@ class HashTable:
 
         Fill this in.
         '''
+        # hash key
         hashed_key = self._hash_mod(key)
+        # pair var
+        pair = self.storage[hashed_key]
 
-        if self.storage[hashed_key]:
-            return self.storage[hashed_key].value
-        else:    
-            return self.storage[hashed_key]    
+        # if bucket is empty, return None
+        if pair is None:
+            return None
+        # else, traverse chain until key is found
+        else:
+            while pair is not None:
+            # if key is found, return value
+            if pair.key == key:
+                return pair.value
+                break
+            # if we reach the end of the chain without finding key, return None
+            elif pair.key != key and pair.next is None:
+                return None
+                break
+            # if current key != key arg and current pair has a next, go to next and continue loop
+            else:
+                pair = pair.next
+                continue
+
+
+        # if self.storage[hashed_key]:
+        #     return self.storage[hashed_key].value
+        # else:    
+        #     return self.storage[hashed_key]    
 
 
     def resize(self):
