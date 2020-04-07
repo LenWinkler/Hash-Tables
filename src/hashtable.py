@@ -51,10 +51,29 @@ class HashTable:
 
         Fill this in.
         '''
+        # hash the key
         hashed_key = self._hash_mod(key)
+        # pair var
+        pair = self.storage[hashed_key]
 
-        self.storage[hashed_key] = LinkedPair(key, value)
-
+        # if there's nothing in the bucket at hashed_key, put new LinkedPair there
+        if pair is None:
+            pair = LinkedPair(key, value)
+        # else, we'll loop through the bucket until we either find the key or we hit the end of the chain
+        else:
+            while pair is not None:
+                # if we get to the end of the chain without finding the key, add new LinkedPair on end of chain
+                if pair.next == None:
+                    pair.next = LinkedPair(key, value)
+                    break
+                # if we find the key (key already exists in chain), replace the value
+                elif pair.key == key:
+                    pair.value = value
+                    break
+                # if current key != key arg and current pair has a next, go to next and continue loop
+                else:
+                    pair = pair.next
+                    continue
 
 
     def remove(self, key):
@@ -65,7 +84,10 @@ class HashTable:
 
         Fill this in.
         '''
+        # hash the key
         hashed_key = self._hash_mod(key)
+        # pair var
+        
 
         if self.storage[hashed_key] == None:
             print('Warning: key not found')
