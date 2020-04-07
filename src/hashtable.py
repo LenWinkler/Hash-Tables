@@ -130,6 +130,7 @@ class HashTable:
         hashed_key = self._hash_mod(key)
         # pair var
         pair = self.storage[hashed_key]
+
         # if bucket is empty, return None
         if pair is None:
             return None
@@ -146,7 +147,6 @@ class HashTable:
                 else:
                     pair = pair.next
                     continue
-
 
         # if self.storage[hashed_key]:
         #     return self.storage[hashed_key].value
@@ -167,9 +167,17 @@ class HashTable:
         self.capacity *= 2
         # set storage to empty list of new size
         self.storage = [None] * self.capacity
-
         
-        
+        # loop over old_storage list
+        for bucket in old_storage:
+        # if bucket is not empty, use while loop to grab each item from bucket
+            if bucket is None:
+                continue
+            else:
+                pair = bucket
+                while pair is not None:
+                    self.insert(pair.key, pair.value)
+                    pair = pair.next
         
         # for bucket in old_storage:
         #     if bucket is not None:
