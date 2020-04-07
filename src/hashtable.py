@@ -97,7 +97,7 @@ class HashTable:
             while pair is not None:
             # if pair.key == key and next is None, set bucket to None
                 if pair.key == key and pair.next is None:
-                    pair = None
+                    self.storage[hashed_key] = None
                     break
                 # if we hit the end of the chain and key is still not found, print warning
                 elif pair.key != key and pair.next is None:
@@ -106,6 +106,7 @@ class HashTable:
                 # when key is found, set next to next.next. this cuts the discarded node out of the chain
                 elif pair.next and pair.next.key == key:
                     pair.next = pair.next.next
+                    break
                 # if current key != key arg and current pair has a next, go to next and continue loop
                 else:
                     pair = pair.next
